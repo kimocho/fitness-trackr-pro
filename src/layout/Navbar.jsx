@@ -1,20 +1,20 @@
 import { useAuth } from "../auth/AuthContext";
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 
 /** Navbar with site navigation links */
 export default function Navbar() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   return (
     <header>
       <p>Fitness Trackr</p>
       <nav>
-        <Link to="../activities/ActivitiesPage.jsx">Activities</Link>
+        <NavLink to="/">Activities</NavLink>
         {token ? (
-          <Link to="/logout">Log out</Link>
+          <a onClick={logout}>Log out</a>
         ) : (
           <>
-            <Link to="/register">Register</Link>
-            <Link to="/login">Login</Link>
+            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/login">Login</NavLink>
           </>
         )}
       </nav>

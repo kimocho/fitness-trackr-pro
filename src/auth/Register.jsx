@@ -34,7 +34,7 @@ export default function Register() {
         <button>Register</button>
         {error && <output>{error}</output>}
       </form>
-      <Link to='/auth'>
+      <Link to='/login'>
         Already have an account? Log in here.
       </Link>
     </>
