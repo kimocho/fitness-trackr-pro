@@ -4,14 +4,15 @@ import { useParams } from 'react-router';
 
 const SingleActivityDetails = (activity) => {
   const [data, setData] = useState();
-  const { data } = useQuery('/activities', 'act');
-  const { activityDetails } = useParams();
+  const { data } = useQuery(`/activities/${activityID}`, 'act');
+  const { activityID } = useParams();
+  const { mutate } = useMutation('DELETE', `/activities/${activityID}`, ['act']);
   return (
     <>
-      <p>{activityDetails.id}</p>
-      <p>{activityDetails.creatorId}</p>
-      <p>{activityDetails.name}</p>
-      <p>{activityDetails.description}</p>
+      <p>{activityID.id}</p>
+      <p>{activityID.creatorId}</p>
+      <p>{activityID.name}</p>
+      <p>{activityID.description}</p>
     </>
   )
 
