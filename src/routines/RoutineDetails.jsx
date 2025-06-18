@@ -6,9 +6,11 @@ const RoutineDetails = () => {
   const { routineID } = useParams();
   const { data: routineData } = useQuery(`/routines/${routineID}`, "routines");
   const { data: activitiesData } = useQuery("/activities", "activities");
+  // const { data: setsData } = useQuery("/sets", "sets");
   const { mutate: delRoutine } = useMutate('DELETE', `/routines/${routineID}`, ["routines"]);
   const { mutate: delSet } = useMutate('DELETE', `/sets/${routineID}`, ["sets"]);
   const { mutate: addSet } = useMutate('POST', `/sets`, ["sets"]);
+
   const navigate = useNavigate();
 
   const deletingRoutine = (formData) => {
@@ -23,10 +25,8 @@ const RoutineDetails = () => {
 
   const addingSet = (formData) => {
     const count = formData.get('numOfReps');
-    const activity = formData.get('activity');
-    console.log(activity);
-    // const routineId = formData.get('activity'.routineId);
-    addSet({ activity, count });
+    const activityId = formData.get('activity');
+    addSet({ routineId: routineID, activityId, count });
   }
 
   return (
@@ -59,11 +59,13 @@ const RoutineDetails = () => {
         <form action={addingSet}>
           <h2>Add a Set</h2>
           <p>Activity</p>
+
           <select name="activity">
-            {activitiesData && activitiesData.map((elem) => (
-              <option key={elem.id}>{elem.name}</option>
+            {activitiesData && activitiesData.map((eachActivity) => (
+              <option key={eachActivity.id} value={eachActivity.id}>{eachActivity.name}</option>
             ))}
           </select>
+
           <label>
             Number of Reps <input name="numOfReps" />
           </label>
