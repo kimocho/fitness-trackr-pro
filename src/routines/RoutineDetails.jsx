@@ -4,27 +4,70 @@ import { useParams, useNavigate } from 'react-router';
 
 const RoutineDetails = () => {
   const { routineID } = useParams();
-  const { data } = useQuery(`/routines/${routineID}`, "routines");
-  const { mutate } = useMutate('DELETE', `/routines/${routineID}`, ["routines"]);
+  const { data: routineData } = useQuery(`/routines/${routineID}`, "routines");
+  const { data: activitiesData } = useQuery("/activities", "activities");
+  const { mutate: delRoutine } = useMutate('DELETE', `/routines/${routineID}`, ["routines"]);
+  const { mutate: delSet } = useMutate('DELETE', `/sets/${routineID}`, ["sets"]);
+  const { mutate: addSet } = useMutate('POST', `/sets`, ["sets"]);
   const navigate = useNavigate();
 
-  const deleting = (formData) => {
-    mutate({ formData });
+  const deletingRoutine = (formData) => {
+    delRoutine({ formData });
     navigate('/routines');
+  }
+
+  const deletingSet = (formData) => {
+    delSet({ formData });
+    navigate(`/routines/${routineID}`);
+  }
+
+  const addingSet = (formData) => {
+    const count = formData.get('numOfReps');
+    const activity = formData.get('activity');
+    console.log(activity);
+    // const routineId = formData.get('activity'.routineId);
+    addSet({ activity, count });
   }
 
   return (
     <>
-      <h1>Routine Details</h1>
       {
-        data &&
-        <form action={deleting}>
-          <p>CreatorID: {data.creatorId}</p>
-          <p>CreatorName: {data.creatorName}</p>
-          <p>Goal: {data.goal}</p>
-          <p>ID: {data.id}</p>
-          <p>Name: {data.name}</p>
+        routineData &&
+        <form action={deletingRoutine}>
+          <h1>{routineData.name}</h1>
+          <p>CreatorName: {routineData.creatorName}</p>
+          <p>Goal: {routineData.goal}</p>
           <button>Delete</button>
+        </form>
+      }
+      <h2>Sets</h2>
+      {(routineData && !routineData.sets.length) && <p>Add a set to the routine.</p>}
+      {
+        routineData &&
+        routineData.sets.map((setObj) => (
+          <form action={deletingSet} key={setObj.id}>
+            <h2>{setObj.name}</h2>
+            <p>name: {setObj.name}</p>
+            <p>description: {setObj.description}</p>
+            <p>duration: {setObj.duration}</p>
+            <p>count: {setObj.count}</p>
+            <button>Delete Set</button>
+          </form>
+        ))
+      }
+      {
+        <form action={addingSet}>
+          <h2>Add a Set</h2>
+          <p>Activity</p>
+          <select name="activity">
+            {activitiesData && activitiesData.map((elem) => (
+              <option key={elem.id}>{elem.name}</option>
+            ))}
+          </select>
+          <label>
+            Number of Reps <input name="numOfReps" />
+          </label>
+          <button>Add Set</button>
         </form>
       }
     </>
