@@ -1,14 +1,12 @@
 import useQuery from '../api/useQuery';
 import useMutation from '../api/useMutation';
 import { useParams, useNavigate } from 'react-router';
-import { useAuth } from '../auth/AuthContext';
 
 const SingleActivityDetails = () => {
   const { activityID } = useParams();
   const { data } = useQuery(`/activities/${activityID}`, 'act');
-  const { mutate, data: data2 } = useMutation('DELETE', `/activities/${activityID}`, ['act']);
+  const { mutate } = useMutation('DELETE', `/activities/${activityID}`, ['act']);
   const navigate = useNavigate();
-  const { token } = useAuth();
 
   const deleting = (formData) => {
     mutate({ formData });
