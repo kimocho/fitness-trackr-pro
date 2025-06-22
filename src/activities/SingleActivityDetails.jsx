@@ -32,20 +32,3 @@ const SingleActivityDetails = () => {
 }
 
 export default SingleActivityDetails;
-
-
-// /** Shows a single activity. Logged-in users will also see a delete button. */
-// function ActivityListItem({ activity }) {
-//   const { token } = useAuth();
-//   const {
-//     mutate: deleteActivity,
-//     loading,
-//     error,
-//   } = useMutation("DELETE", "/activities/" + activity.id, ["activities"]);
-// {
-//   token && (
-//     <button onClick={() => deleteActivity()}>
-//       {loading ? "Deleting" : error ? error : "Delete"}
-//     </button>
-//   )
-// }

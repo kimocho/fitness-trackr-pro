@@ -4,20 +4,21 @@ import { Link } from 'react-router';
 import { useAuth } from '../auth/AuthContext';
 
 const Routines = () => {
-  const { data } = useQuery('/routines', 'routines');
-  const { mutate } = useMutation('POST', '/routines', ['routines']);
+  const { data: routinesData } = useQuery('/routines', 'routines');
+  const { mutate: add } = useMutation('POST', '/routines', ['routines']);
   const { token } = useAuth();
+
   const addRoutine = (formdata) => {
     const name = formdata.get('nameInput');
     const goal = formdata.get('goalInput');
-    mutate({ name, goal });
+    add({ name, goal });
   }
 
   return (
     <>
       <h1>Routines</h1>
       {
-        data && data.map((eachRoutine) =>
+        routinesData && routinesData.map((eachRoutine) =>
           <Link to={`/routineDetails/${eachRoutine.id}`} key={eachRoutine.id}>
             <li>{eachRoutine.name}</li>
           </Link>
